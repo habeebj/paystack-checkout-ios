@@ -15,12 +15,19 @@ public class CheckoutViewController: UIViewController {
     var progressView = UIProgressView()
     public var params: TransactionParams
     public var customFields: [CustomField]
-    public var delegate: CheckoutProtocol
+    public var delegate: CheckoutProtocol?
     
     public init(params: TransactionParams, customFields: [CustomField] = [], delegate: CheckoutProtocol) {
         self.params = params
         self.customFields = customFields
         self.delegate = delegate
+        super.init(nibName: nil, bundle: nil)
+        self.presentationController?.delegate = self
+    }
+    
+    init(params: TransactionParams, customFields: [CustomField] = []) {
+        self.params = params
+        self.customFields = customFields
         super.init(nibName: nil, bundle: nil)
         self.presentationController?.delegate = self
     }
@@ -43,7 +50,7 @@ public class CheckoutViewController: UIViewController {
                 DispatchQueue.main.async {
                     self?.dismiss(animated: true)
                 }
-                self?.delegate.onError(error: error)
+                self?.delegate?.onError(error: error)
                 return
             }
             let urlRequest = URLRequest(url: URL(string: response.url)!)
@@ -104,7 +111,7 @@ public class CheckoutViewController: UIViewController {
     }
     
     @objc func onCancelButtonTap() {
-        delegate.onDimissal()
+        delegate?.onDimissal()
         dismiss(animated: true)
     }
     
@@ -113,17 +120,17 @@ public class CheckoutViewController: UIViewController {
             guard let event  = bodyDict["event"] as? String else { return }
             switch event {
             case TransactionEvents.close:
-                delegate.onDimissal()
+                delegate?.onDimissal()
                 dismiss(animated: true)
             case TransactionEvents.success:
                 guard let response =  parseTransactionResponse(dict: bodyDict) else {
                     self.dismiss(animated: true)
-                    delegate.onError(error: ErrorResponse.genericError)
+                    delegate?.onError(error: ErrorResponse.genericError)
                     return
                 }
                 delay(2) { [weak self] in
                     self?.dismiss(animated: true)
-                    self?.delegate.onSuccess(response: response)
+                    self?.delegate!.onSuccess(response: response)
                 }
             default:
                 break
@@ -156,7 +163,7 @@ extension CheckoutViewController: WKScriptMessageHandler {
 
 extension CheckoutViewController: UIAdaptivePresentationControllerDelegate {
     public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        delegate.onDimissal()
+        delegate?.onDimissal()
     }
 }
 

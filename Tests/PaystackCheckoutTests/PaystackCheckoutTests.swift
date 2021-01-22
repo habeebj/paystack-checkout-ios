@@ -6,7 +6,7 @@ final class PaystackCheckoutTests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
-        XCTAssertEqual(PaystackCheckout().text, "Hello, World!")
+        XCTAssertEqual("", "Hello, World!")
     }
 
     static var allTests = [
