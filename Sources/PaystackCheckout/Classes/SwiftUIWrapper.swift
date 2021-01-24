@@ -7,8 +7,7 @@
 
 import SwiftUI
 
-#if UIKIT
-#else
+//#if UIKIT
 @available(iOS 13.0.0, *)
 public struct PaystackCheckout: UIViewControllerRepresentable {
     
@@ -78,4 +77,4 @@ public struct PaystackCheckout: UIViewControllerRepresentable {
         }
     }
 }
-#endif
+//#endif
