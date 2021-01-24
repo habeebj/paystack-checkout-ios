@@ -7,37 +7,36 @@
 
 import SwiftUI
 
+#if UIKIT
+#else
 @available(iOS 13.0.0, *)
 public struct PaystackCheckout: UIViewControllerRepresentable {
     
     private let params: TransactionParams
-    private var customFields: [CustomField] = []
+    private var metadata: Metadata?
     private var onResponse: ((TransactionResponse?, Error?, Bool) -> Void)? = nil
     private var onError: ((Error?) -> Void)? = nil
     private var onSuccess: ((TransactionResponse) -> Void)? = nil
     private var onDismiss: (() -> Void)? = nil
     
     
-    public init(params: TransactionParams, customFields: [CustomField]? = nil, onResponse: @escaping ((TransactionResponse?, Error?, Bool) -> Void)) {
+    public init(params: TransactionParams, metadata: Metadata? = nil, onResponse: @escaping ((TransactionResponse?, Error?, Bool) -> Void)) {
         self.params = params
-        if let customFields = customFields {
-            self.customFields = customFields
-        }
+        self.metadata = metadata
         self.onResponse = onResponse
     }
     
-    public init(params: TransactionParams, customFields: [CustomField]? = nil, onSuccess: @escaping (TransactionResponse) -> Void, onError: @escaping (Error?) -> Void, onDismiss: @escaping () -> Void) {
+    public init(params: TransactionParams, metadata: Metadata? = nil, onSuccess: @escaping (TransactionResponse) -> Void, onError: @escaping (Error?) -> Void, onDismiss: @escaping () -> Void) {
         self.params = params
-        if let customFields = customFields {
-            self.customFields = customFields
-        }
+        self.metadata = metadata
         self.onSuccess = onSuccess
         self.onError = onError
         self.onDismiss = onDismiss
     }
     
     public func makeUIViewController(context: Context) -> some UIViewController {
-        let vc = CheckoutViewController(params: self.params, customFields: self.customFields)
+        
+        let vc = CheckoutViewController(params: params, metadata: metadata)
         vc.delegate = CheckoutDelegate(self)
         return vc
     }
@@ -79,3 +78,4 @@ public struct PaystackCheckout: UIViewControllerRepresentable {
         }
     }
 }
+#endif

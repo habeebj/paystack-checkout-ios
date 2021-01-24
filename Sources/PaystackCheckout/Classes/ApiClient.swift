@@ -1,20 +1,23 @@
-import UIKit
 import WebKit
 
 public class APIClient {
     public static var shared = APIClient()
     let url = "https://api.paystack.co/checkout/request_inline"
     
-    public func requestInline(params: TransactionParams, customFields: [CustomField] = [], completion: @escaping (PaymentResponse?, Error?) -> Void) {
-        let metadata = Metadata(custom_fields: customFields)
-        let encodingError = NSError(domain: "unable to encode custom fields", code: 1, userInfo: nil)
-        guard let data = try? JSONEncoder().encode(metadata) else {
-            completion(nil, encodingError)
-            return
-        }
-        guard let dataString = String(data: data, encoding: .utf8) else {
-            completion(nil, encodingError)
-            return
+    public func requestInline(params: TransactionParams, metadata: Metadata?, completion: @escaping (PaymentResponse?, Error?) -> Void) {
+        var metadataString: String = ""
+        
+        if let metadata = metadata {
+            let encodingError = NSError(domain: "Unable to encode metadata", code: 1, userInfo: nil)
+            guard let data = try? JSONEncoder().encode(metadata) else {
+                completion(nil, encodingError)
+                return
+            }
+            guard let _dataString = String(data: data, encoding: .utf8) else {
+                completion(nil, encodingError)
+                return
+            }
+            metadataString = _dataString
         }
         
         let _params: [String : Any?] = [
@@ -30,7 +33,7 @@ public class APIClient {
             "transaction_charge" : params.transactionCharge,
             "bearer" : params.bearer,
             "currency" : params.currency?.rawValue,
-            "metadata": dataString
+            "metadata": metadataString
         ]
         
         let cleanParams = _params.compactMapValues{$0}

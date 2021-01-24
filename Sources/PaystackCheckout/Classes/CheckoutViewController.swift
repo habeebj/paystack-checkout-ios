@@ -14,20 +14,20 @@ public class CheckoutViewController: UIViewController {
     var headerView = UIView()
     var progressView = UIProgressView()
     public var params: TransactionParams
-    public var customFields: [CustomField]
+    public var metadata: Metadata?
     public var delegate: CheckoutProtocol?
     
-    public init(params: TransactionParams, customFields: [CustomField] = [], delegate: CheckoutProtocol) {
+    public init(params: TransactionParams, metadata: Metadata? = nil, delegate: CheckoutProtocol) {
         self.params = params
-        self.customFields = customFields
+        self.metadata = metadata
         self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
         self.presentationController?.delegate = self
     }
     
-    init(params: TransactionParams, customFields: [CustomField] = []) {
+    init(params: TransactionParams, metadata: Metadata? = nil) {
         self.params = params
-        self.customFields = customFields
+        self.metadata = metadata
         super.init(nibName: nil, bundle: nil)
         self.presentationController?.delegate = self
     }
@@ -45,7 +45,7 @@ public class CheckoutViewController: UIViewController {
     }
     
     private func requestInline() {
-        APIClient.shared.requestInline(params: params, customFields: customFields) { [weak self] response, error in
+        APIClient.shared.requestInline(params: params, metadata: metadata) { [weak self] response, error in
             guard let response = response else {
                 DispatchQueue.main.async {
                     self?.dismiss(animated: true)
@@ -69,7 +69,7 @@ public class CheckoutViewController: UIViewController {
         headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         headerView.heightAnchor.constraint(equalToConstant: 60).isActive = true
         headerView.backgroundColor = UIColor(red: 0.957, green: 0.957, blue: 0.957, alpha: 1)
-         let cancelIcon = UIImageView(image: UIImage.bundledImage(named: "cancel"))
+        let cancelIcon = UIImageView(image: UIImage.bundledImage(named: "cancel"))
         
         cancelIcon.translatesAutoresizingMaskIntoConstraints = false
         headerView.addSubview(cancelIcon)

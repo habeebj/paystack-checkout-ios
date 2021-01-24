@@ -8,7 +8,15 @@
 
 import Foundation
 
-struct Metadata: Encodable {
+public struct CustomFilters: Encodable {
+    let recurring: Bool
+    let banks: [String]
+    let card_brands: [String]
+}
+
+public struct Metadata: Encodable {
+    let cancel_action: String
+    let custom_filters: CustomFilters
     let custom_fields: [CustomField]
 }
 
