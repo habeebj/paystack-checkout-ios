@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "PaystackCheckout",
+        "repositoryURL": "https://github.com/hoyme-dev/paystack-checkout-ios.git",
+        "state": {
+          "branch": "dev",
+          "revision": "2414c7f5e8da3fffadf582b3074cdbec33cdd53a",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
