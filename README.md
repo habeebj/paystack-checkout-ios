@@ -13,9 +13,6 @@ Improved version of [Paystack](https://github.com/PaystackHQ/checkout-ios)'s che
 ### Using [Swift Package Manager](https://swift.org/package-manager)
 
 Paystack checkout for iOS is available as a Swift package. Simply add this repo through the swift package manager in Xcode.
->For UIKit, switch to `uikit` branch when installing from swift package manager.
-
-![uikit_branch](Resources/uikit_branch.png)
 
 ## Usage
 ### SwiftUI
@@ -78,12 +75,9 @@ PaystackCheckout(params: transactionParams, metadata: metadata) { (response) in
 } onDismiss: {
     status = "dismissed"
 }
-
-
 ```
 
 ### UIKit
->Make sure you select the `uikit` branch when installing from swift package manager.
 
 Follow the instruction [here](https://github.com/PaystackHQ/checkout-ios)
 
